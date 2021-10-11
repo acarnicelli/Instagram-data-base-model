@@ -1,5 +1,6 @@
 import os
 import sys
+import enum
 from sqlalchemy import Column, ForeignKey, Integer, String, Enum
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
@@ -7,7 +8,6 @@ from sqlalchemy import create_engine
 from eralchemy import render_er
 
 Base = declarative_base()
-
 
 class User(Base):
     __tablename__ = 'user'
@@ -36,11 +36,16 @@ class Post(Base):
     user = relationship('User')
 
 
+class TypeEnums(enum.Enum):
+    video = 'video'
+    photo = 'photo'
+    etc = 'etc'
+
 class Media(Base):
     __tablename__ = 'media'
 
     id = Column(Integer, primary_key=True)
-    type = Column(Enum)
+    type = Column(Enum(TypeEnums))
     url = Column(String(250))
     post_id = Column(Integer, ForeignKey('post.id'))
     post = relationship('Post')
