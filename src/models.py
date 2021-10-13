@@ -13,12 +13,16 @@ class User(Base):
     __tablename__ = 'user'
 
     id = Column(Integer, primary_key=True)
-    username = Column(String)
-    firstname = Column(String)
-    lastname = Column(String)
-    email = Column(String)
+    username = Column(String(250))
+    firstname = Column(String(250))
+    lastname = Column(String(250))
+    email = Column(String(250), unique = True)
+    follower = relationship('Follower', backref='user')
+    post = relationship('Post', backref='user')
+    comment = relationship('Comment', backref='user')
 
 
+  
 class Follower(Base):
     __tablename__ = 'follower'
 
@@ -34,12 +38,15 @@ class Post(Base):
     id = Column(Integer, primary_key=True)
     user_id = Column(Integer, ForeignKey('user.id'))
     user = relationship('User')
+    media = relationship('Media', backref='post')
+    comment = relationship('Comment', backref='post')
 
 
 class TypeEnums(enum.Enum):
     video = 'video'
     photo = 'photo'
     etc = 'etc'
+
 
 class Media(Base):
     __tablename__ = 'media'
